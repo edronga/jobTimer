@@ -54,6 +54,16 @@ function getTimerScreen(){
                     pauseTimer();
                 }
             })
+            document.addEventListener('keydown', (e) => {
+                if (e.key === ' '){
+                    if (isTimerPaused){
+                        restartTimer();
+                    }
+                    else {
+                        pauseTimer();
+                    } 
+                }
+            })
 
             return r;
         }()
@@ -70,6 +80,15 @@ function getTimerScreen(){
 
             r.innerText = 'SAVE'
 
+            r.addEventListener('pointerdown', (e) =>{
+                if (!isTimerPaused){
+                    return;
+                }
+                const category = document.querySelector('#categoryInput').value
+                const time = currentTime
+                scoreBoard.push({ category: currentTime})
+            })
+
             return r;
         }()
         r.appendChild(saveButton)
@@ -79,9 +98,56 @@ function getTimerScreen(){
     }()
     r.appendChild(buttons)
 
+    const rightPanel = function(){
+        let r = document.createElement('div')
+        r.style.width = '100%'
+        r.style.height = '100%'
+        r.style.gridArea = 'rightPanel'
+        r.style.display = 'flex'
+        r.style.flexDirection = 'column'
+        
+        const categoryInput = function(){
+            let r = document.createElement('input')
+            r.id = 'categoryInput'
+            r.style.width = '100%'
+            r.style.height = '50%'
+
+            r.value = 'outpatientFollowUp'
+
+            return r;
+        }()
+        r.appendChild(categoryInput)
+
+        const goToScoresButton = function(){
+            let r = document.createElement('div')
+            r.style.width = '100%'
+            r.style.height = '50%'
+            r.style.display = 'flex'
+            r.style.justifyContent = 'center'
+            r.style.alignItems = 'center'
+
+            r.innerText = 'SCORES'
+
+            r.addEventListener('pointerdown', () =>{
+                const body = document.getElementsByTagName('body')[0]
+                const html = getScoresScreen(scoreBoard)
+                body.innerHTML = ''
+                body.appendChild(html)
+            })
+
+            return r;
+        }()
+        r.appendChild(goToScoresButton)
+
+
+        return r;
+    }()
+    r.appendChild(rightPanel)
+
 
     let referenceTime = Date.now()
     let isTimerPaused = true
+    let currentTime = 0
     function convertTimeToString(timeInMs){
         if (timeInMs > 99 * 60 * 60){
             return '99 : 60 : 60'
@@ -98,6 +164,7 @@ function getTimerScreen(){
             const elapsedTime = Date.now() - referenceTime
             const v = convertTimeToString(elapsedTime)
             r.querySelector('#timer').innerText = v
+            currentTime = elapsedTime
         }
         requestAnimationFrame(updateTimer);
     }

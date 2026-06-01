@@ -8,5 +8,5 @@ function main(){
     body.appendChild(html)
 }
 
-
+let scoreBoard = []
 main();
