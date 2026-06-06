@@ -61,7 +61,7 @@ function getTimerScreen(){
                     }
                     else {
                         pauseTimer();
-                    } 
+                    }
                 }
             })
 
@@ -86,7 +86,9 @@ function getTimerScreen(){
                 }
                 const category = document.querySelector('#categoryInput').value
                 const time = currentTime
-                scoreBoard.push({ category: currentTime})
+let o = {}
+o[category] = currentTime
+                scoreBoard.push(o)
             })
 
             return r;
@@ -105,7 +107,7 @@ function getTimerScreen(){
         r.style.gridArea = 'rightPanel'
         r.style.display = 'flex'
         r.style.flexDirection = 'column'
-        
+       
         const categoryInput = function(){
             let r = document.createElement('input')
             r.id = 'categoryInput'
@@ -184,3 +186,4 @@ function getTimerScreen(){
 
     return r;
 }
+

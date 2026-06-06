@@ -1,3 +1,4 @@
+
 'use strict'
 
 function getScoresScreen(scoreBoard){
@@ -5,7 +6,7 @@ function getScoresScreen(scoreBoard){
     r.style.width = '100%'
     r.style.height = '100%'
     r.style.display = 'flex'
-    
+   
     const sortedScores = function(){
         let r = {}
         if (scoreBoard.length === 0){
@@ -15,9 +16,9 @@ function getScoresScreen(scoreBoard){
             let r = {}
             scoreBoard.forEach((obj) =>{
                 const category = Object.keys(obj)[0]
-                const time = obj['category']
+                const time = obj[category]
                 if (r[category] === undefined){
-                    r[category] = []
+                    r[category] = [time]
                 }
                 else {
                     r[category].push(time)
@@ -28,17 +29,20 @@ function getScoresScreen(scoreBoard){
 
         const sortedData = function(){
             let r = {}
-            data.forEach((key) =>{
-                r[key] = data.key.toSorted((a, b) => a - b)
+            Object.keys(data).forEach((key) =>{
+                r[key] = data[key].toSorted((a, b) => a - b)
             })
             return r;
         }()
 
+console.log(sortedData)
+
         const textData = function(){
             let r = {}
-            sortedData.forEach((key) =>{
-                r[key] = data.key.map((value) => convertTimeToString(value))
+            Object.keys(sortedData).forEach((key) =>{
+                r[key] = data[key].map((value) => convertTimeToString(value))
             })
+return r;
         }()
 
         r = textData
@@ -72,3 +76,4 @@ function getScoresScreen(scoreBoard){
 
     return r;
 }
+
