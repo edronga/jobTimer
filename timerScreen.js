@@ -4,6 +4,7 @@ function getTimerScreen(){
     let r = document.createElement('div')
     r.style.width = '100dvw'
     r.style.height = '100dvh'
+    r.style.margin = 0
     r.style.display = 'grid'
     r.style.gridTemplate = `
     'timer rightPanel' 75dvh
@@ -12,14 +13,21 @@ function getTimerScreen(){
 
     const timer = function(){
         let r = document.createElement('div')
-        r.style.width = '100%'
-        r.style.height = '100%'
+        r.style.width = '95%'
+        r.style.height = '95%'
         r.style.gridArea = 'timer'
+        r.style.alignSelf = 'center'
+        r.style.justifySelf = 'center'
         r.style.display = 'flex'
         r.style.justifyContent = 'center'
         r.style.alignItems = 'center'
         r.id = 'timer'
+
         r.style.fontSize = '20dvh'
+        r.style.border = 'solid black 2px'
+        r.style.borderRadius = '20px'
+
+        r.style.backgroundColor = 'lightGrey'
 
         r.innerText = '00 : 00 : 00'
 
@@ -33,16 +41,29 @@ function getTimerScreen(){
         r.style.width = '100%'
         r.style.height = '100%'
         r.style.gridArea = 'buttons'
-        r.style.display = 'flex'
+        r.style.alignSelf = 'center'
+        r.style.justifySelf = 'center'
+        r.style.display = 'grid'
+        r.style.gridTemplate = `
+        'startAndStopButton saveButton' 100% / 50% 50%
+        `
 
         const startAndStopButton = function(){
             let r = document.createElement('div')
-            r.style.width = '50%'
-            r.style.height = '100%'
+            r.style.width = '45%'
+            r.style.height = '95%'
             r.id = 'startAndStopButton'
+            r.style.gridArea = 'startAndStopButton'
+            r.style.alignSelf = 'center'
+            r.style.justifySelf = 'center'
             r.style.display = 'flex'
             r.style.justifyContent = 'center'
             r.style.alignItems = 'center'
+
+            r.style.border = 'solid black 2px'
+            r.style.borderRadius = '20px'
+
+            r.style.backgroundColor = 'lightGreen'
 
             r.innerText = 'START'
 
@@ -71,12 +92,20 @@ function getTimerScreen(){
 
         const saveButton = function(){
             let r = document.createElement('div')
-            r.style.width = '50%'
-            r.style.height = '100%'
-            r.id = 'startAndStopButton'
+            r.style.width = '45%'
+            r.style.height = '95%'
+            r.id = 'saveButton'
+            r.style.gridArea = 'saveButton'
+            r.style.alignSelf = 'center'
+            r.style.justifySelf = 'center'
             r.style.display = 'flex'
             r.style.justifyContent = 'center'
             r.style.alignItems = 'center'
+
+            r.style.border = 'solid black 2px'
+            r.style.borderRadius = '20px'
+
+            r.style.backgroundColor = 'lightGrey'
 
             r.innerText = 'SAVE'
 
@@ -84,11 +113,31 @@ function getTimerScreen(){
                 if (!isTimerPaused){
                     return;
                 }
+                if (hasAlreadySaved){
+                    return;
+                }
                 const category = document.querySelector('#categoryInput').value
                 const time = currentTime
-let o = {}
-o[category] = currentTime
+                let o = {}
+                o[category] = currentTime
                 scoreBoard.push(o)
+
+                document.querySelector('#scoreBoardVisualizer').innerText = function(){
+                    let r = ''
+                    scoreBoard.forEach((value) =>{
+                        const key = Object.keys(value)[0]
+                        const time = convertTimeToString(value[key])
+                        r = r + key + '\n'
+                        r = r + time + `\n\n`
+                    })
+
+                    return r;
+                }()
+
+                hasAlreadySaved = true;
+
+                document.querySelector('#saveButton').style.backgroundColor = 'lightGrey'
+                document.querySelector('#startAndStopButton').style.backgroundColor = 'lightGreen'
             })
 
             return r;
@@ -102,17 +151,26 @@ o[category] = currentTime
 
     const rightPanel = function(){
         let r = document.createElement('div')
-        r.style.width = '100%'
-        r.style.height = '100%'
+        r.style.width = '95%'
+        r.style.height = '95%'
         r.style.gridArea = 'rightPanel'
-        r.style.display = 'flex'
-        r.style.flexDirection = 'column'
+        r.style.display = 'grid'
+        r.style.gridTemplate = `
+        'input' 20%
+        'text'60%
+        'scores' 20%
+        `
+
+        r.style.border = 'solid black 2px'
        
         const categoryInput = function(){
             let r = document.createElement('input')
             r.id = 'categoryInput'
-            r.style.width = '100%'
-            r.style.height = '50%'
+            r.type = 'text'
+            r.style.width = '95%'
+            r.style.gridArea = 'input'
+            r.style.alignSelf = 'center'
+            r.style.justifySelf = 'center'
 
             r.value = 'outpatientFollowUp'
 
@@ -120,13 +178,39 @@ o[category] = currentTime
         }()
         r.appendChild(categoryInput)
 
+        const text = function(){
+            let r = document.createElement('div')
+            r.style.width = '95%'
+            r.style.height = '95%'
+            r.style.gridArea = 'text'
+            r.id = 'scoreBoardVisualizer'
+            r.style.alignSelf = 'center'
+            r.style.justifySelf = 'center'
+            r.style.display = 'flex'
+            r.style.alignItems = 'start'
+            r.style.justifyContent = 'center'
+
+            r.style.overflowY = 'auto'
+            r.style.border = 'solid black 2px'
+
+            r.innerText = ''
+
+            return r;
+        }()
+        r.appendChild(text)
+
         const goToScoresButton = function(){
             let r = document.createElement('div')
-            r.style.width = '100%'
-            r.style.height = '50%'
+            r.style.width = '95%'
+            r.style.height = '95%'
+            r.style.gridArea = 'scores'
+            r.style.alignSelf = 'center'
+            r.style.justifySelf = 'center'
             r.style.display = 'flex'
-            r.style.justifyContent = 'center'
             r.style.alignItems = 'center'
+            r.style.justifyContent = 'center'
+
+            r.style.border = 'solid black 2px'
 
             r.innerText = 'SCORES'
 
@@ -150,8 +234,9 @@ o[category] = currentTime
     let referenceTime = Date.now()
     let isTimerPaused = true
     let currentTime = 0
+    let hasAlreadySaved = false
     function convertTimeToString(timeInMs){
-        if (timeInMs > 99 * 60 * 60){
+        if (timeInMs > 99 * 60 * 60 * 1000){
             return '99 : 60 : 60'
         }
         const hours = Math.floor(timeInMs / (60 * 60 * 1000))
@@ -174,12 +259,19 @@ o[category] = currentTime
     function pauseTimer(){
         isTimerPaused = true
         r.querySelector('#startAndStopButton').innerText = 'START'
+        r.querySelector('#timer').style.backgroundColor = 'lightGrey'
+        r.querySelector('#saveButton').style.backgroundColor = 'lightGreen'
+        r.querySelector('#startAndStopButton').style.backgroundColor = 'lightBlue'
     }
 
     function restartTimer(){
         referenceTime = Date.now()
         isTimerPaused = false
         r.querySelector('#startAndStopButton').innerText = 'STOP'
+        hasAlreadySaved = false
+        r.querySelector('#timer').style.backgroundColor = 'lightGreen'
+        r.querySelector('#saveButton').style.backgroundColor = 'lightGrey'
+        r.querySelector('#startAndStopButton').style.backgroundColor = 'lightGreen'
     }
 
     updateTimer();

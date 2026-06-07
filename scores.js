@@ -5,6 +5,7 @@ function getScoresScreen(scoreBoard){
     let r = document.createElement('div')
     r.style.width = '100%'
     r.style.height = '100%'
+    r.style.margin = 0
     r.style.display = 'flex'
    
     const sortedScores = function(){
@@ -35,20 +36,41 @@ function getScoresScreen(scoreBoard){
             return r;
         }()
 
-console.log(sortedData)
-
         const textData = function(){
             let r = {}
             Object.keys(sortedData).forEach((key) =>{
-                r[key] = data[key].map((value) => convertTimeToString(value))
+                r[key] = sortedData[key].map((value) => convertTimeToString(value))
             })
-return r;
+
+            return r;
         }()
 
         r = textData
-        console.log(r)
-
         return r;
+    }()
+
+    const generatePage = function(){
+        Object.keys(sortedScores).forEach((key) =>{
+            let div = document.createElement('div')
+            div.style.width = '15dvw'
+            div.style.margin = '1dvw'
+            div.style.display = 'flex'
+            div.style.alignItems = 'start'
+            div.style.justifyContent = 'center'
+
+            div.style.border = 'solid black 2px'
+
+            div.innerText = function(){
+                let r = ''
+                r = `${key}\n\n`
+                sortedScores[key].forEach((value) =>{
+                    r = r + value + '\n'
+                })
+                return r;
+            }()
+
+            r.appendChild(div)
+        })
     }()
 
 
